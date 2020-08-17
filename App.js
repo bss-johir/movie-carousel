@@ -1,12 +1,47 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, FlatList, Dimensions } from 'react-native';
+import { getMovies } from './api';
+const { width, height } = Dimensions.get('window')
+const ITEM_SIZE = width * 0.72 , SPACING = 10
 export default function App() {
+  const [ movies, setMovies ] = useState([])
+  const [ loading, setLoading ] = useState(false)
+
+  const fetchData = async () => {
+    setLoading(true)
+    const movies = await getMovies();
+    setMovies(movies)
+    setLoading(false)
+  }
+  useEffect(() => {
+    fetchData()
+  }, [])
+
   return (
     <View style={styles.container}>
-      <Text>Hello i am Rayhan!</Text>
-      <StatusBar style="auto" />
+      <StatusBar hidden />
+      {
+        loading ? 
+        <Text>Loading....</Text>
+        :
+        <FlatList
+          keyExtractor={item => item.key}
+          data={movies}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.contentContainerStyle}
+          renderItem={({item}) => (
+            <View style={{ width: ITEM_SIZE}}>
+              <View style={styles.movieItem}>
+                <Text style={{ fontSize: 24 }} numberOfLines={1}>
+                  {item.title}
+                </Text>
+              </View>
+            </View>
+          )}
+        />
+      }
     </View>
   );
 }
@@ -18,4 +53,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  contentContainerStyle: {
+    alignItems: 'center'
+  },
+  movieItem: {
+    padding: SPACING * 2,
+    marginHorizontal: SPACING,
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 34,
+  }
 });
