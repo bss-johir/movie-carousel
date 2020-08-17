@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, Dimensions, Image } from 'react-native';
 import { getMovies } from './api';
 import Rating from './Rating';
+import Genres from './Genres';
 //
 const { width } = Dimensions.get('window')
 const ITEM_SIZE = width * 0.72 , SPACING = 10
@@ -47,6 +48,7 @@ export default function App() {
                 {/* Rating */}
                 <Rating rating={item.rating} />
                 {/* Genres */}
+                <Genres genres={item.genres} />
                 <Text style={{ fontSize: 12 }} numberOfLines={3}>
                   {item.description}
                 </Text>
