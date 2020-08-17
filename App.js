@@ -1,9 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Dimensions, Image } from 'react-native';
 import { getMovies } from './api';
-const { width, height } = Dimensions.get('window')
+import Rating from './Rating';
+//
+const { width } = Dimensions.get('window')
 const ITEM_SIZE = width * 0.72 , SPACING = 10
+//
 export default function App() {
   const [ movies, setMovies ] = useState([])
   const [ loading, setLoading ] = useState(false)
@@ -34,8 +37,18 @@ export default function App() {
           renderItem={({item}) => (
             <View style={{ width: ITEM_SIZE}}>
               <View style={styles.movieItem}>
+                <Image 
+                  source={{ uri: item.poster}}
+                  style={styles.posterImage}
+                />
                 <Text style={{ fontSize: 24 }} numberOfLines={1}>
                   {item.title}
+                </Text>
+                {/* Rating */}
+                <Rating rating={item.rating} />
+                {/* Genres */}
+                <Text style={{ fontSize: 12 }} numberOfLines={3}>
+                  {item.description}
                 </Text>
               </View>
             </View>
@@ -62,5 +75,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     borderRadius: 34,
+  },
+  posterImage: {
+    width: '100%',
+    height: ITEM_SIZE * 1.2,
+    resizeMode: 'cover',
+    borderRadius: 24,
+    marginBottom: 10
   }
 });

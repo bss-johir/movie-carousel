@@ -50,6 +50,6 @@ export const getMovies = async () => {
       genres: genre_ids.map((genre) => genres[genre]),
     })
   );
-console.log('PRINT IN %s=====>', 'Api', movies)
+// console.log('PRINT IN %s=====>', 'Api', movies)
   return movies;
 };
