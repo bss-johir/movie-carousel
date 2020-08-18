@@ -7,6 +7,7 @@ import Genres from './Genres';
 //
 const { width } = Dimensions.get('window')
 const ITEM_SIZE = width * 0.72, SPACING = 10
+const SPACE_SIZE = (width - ITEM_SIZE) / 2
 //
 export default function App() {
   const [movies, setMovies] = useState([])
@@ -16,7 +17,7 @@ export default function App() {
   const fetchData = async () => {
     setLoading(true)
     const movies = await getMovies();
-    setMovies(movies)
+    setMovies([{ key: 'space_left' }, ...movies, { key: 'space_right' }])
     setLoading(false)
   }
 
@@ -46,10 +47,21 @@ export default function App() {
             scrollEventThrottle={16}
             contentContainerStyle={styles.contentContainerStyle}
             renderItem={({ item, index }) => {
+              if (!item.poster) {
+                return (
+                  <View
+                    style={{
+                      width: SPACE_SIZE,
+                      backgroundColor: 'red',
+                      height: 200
+                    }}
+                  />
+                )
+              }
               const inputRange = [
+                (index - 2) * ITEM_SIZE,
                 (index - 1) * ITEM_SIZE,
                 index * ITEM_SIZE,
-                (index + 1) * ITEM_SIZE,
               ];
               const translateY = scrollX.interpolate({
                 inputRange,
