@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 
 const Genres = ({ genres }) => {
  return (
-  <View style={styles.genres}>
+  <View style={styles.geners}>
    {
     genres.map((genre, index) => (
      <View key={index} style={styles.gener}>
