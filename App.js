@@ -1,14 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, FlatList, Dimensions, Image, Animated } from 'react-native';
+import MaskedView from '@react-native-community/masked-view'
+import svg, { Rect } from 'react-native-svg'
+import { LinerGradient } from 'expo-linear-gradient'
+//
 import { getMovies } from './api';
 import Rating from './Rating';
 import Genres from './Genres';
+import Backdrop from './Backdrop';
 //
 const { width } = Dimensions.get('window')
 const ITEM_SIZE = width * 0.72, SPACING = 10
 const SPACE_SIZE = (width - ITEM_SIZE) / 2
 //
+
 export default function App() {
   const [movies, setMovies] = useState([])
   const [loading, setLoading] = useState(false)
@@ -28,6 +34,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <StatusBar hidden />
+      <Backdrop {...{movies, scrollX}} />
       {
         loading ?
           <Text>Loading....</Text>
@@ -52,8 +59,6 @@ export default function App() {
                   <View
                     style={{
                       width: SPACE_SIZE,
-                      backgroundColor: 'red',
-                      height: 200
                     }}
                   />
                 )
