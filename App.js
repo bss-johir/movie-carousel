@@ -11,7 +11,7 @@ import Genres from './Genres';
 import Backdrop from './Backdrop';
 //
 const { width } = Dimensions.get('window')
-const ITEM_SIZE = width * 0.72, SPACING = 10
+export const ITEM_SIZE = width * 0.72, SPACING = 10
 const SPACE_SIZE = (width - ITEM_SIZE) / 2
 //
 
