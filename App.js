@@ -1,9 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, FlatList, Dimensions, Image, Animated } from 'react-native';
-import MaskedView from '@react-native-community/masked-view'
-import svg, { Rect } from 'react-native-svg'
-import { LinerGradient } from 'expo-linear-gradient'
+import { StyleSheet, Text, View, Dimensions, Image, Animated } from 'react-native';
 //
 import { getMovies } from './api';
 import Rating from './Rating';
