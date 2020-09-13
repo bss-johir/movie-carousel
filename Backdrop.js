@@ -1,22 +1,30 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, FlatList, Image, Animated } from 'react-native';
+import { View, StyleSheet, Dimensions, FlatList, Image, Animated, Platform } from 'react-native';
 import MaskedView from '@react-native-community/masked-view';
 import Svg, { Rect } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 //
 const testImg = 'https://image.tmdb.org/t/p/w370_and_h556_multi_faces/ishzDCZIv9iWfI70nv5E4ZreYUD.jpg'
 const { width, height } = Dimensions.get('window')
-const ITEM_SIZE = width * 0.72
+const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.72 : width * 0.74
 const BACKDROP_HEIGHT = height * 0.6
+const EMPTY_ITEM_SIZE = ( width - ITEM_SIZE) / 2
+
 const AnimatedSvg = Animated.createAnimatedComponent(Svg)
 
 
 const Backdrop = ({ movies, scrollX }) => {
   return (
-    <View style={{ position: 'absolute', top:0, width, height: BACKDROP_HEIGHT }}>
+    <View style={{ 
+      position: 'absolute', 
+      top:0, 
+      width, 
+      height: BACKDROP_HEIGHT }}>
       <FlatList
-        data={movies}
-        keyExtractor={(item) => item.key}
+        data={movies.reverse()}
+        keyExtractor={(item) => item.key + '-backdrop'}
+        removeClippedSubviews={false}
+        contentContainerStyle={{ width, height: BACKDROP_HEIGHT}}
         renderItem={({ item, index }) => {
           
           if (!item.backdrop) {
@@ -27,32 +35,23 @@ const Backdrop = ({ movies, scrollX }) => {
 
           const translateX = scrollX.interpolate({
             inputRange,
-            outputRange: [-width, 0],
+            outputRange: [0, width],
           });
 
           return (
-            <MaskedView
-              style={StyleSheet.absoluteFill, { flex: 1 }}
-              maskElement={
-                <AnimatedSvg
-                  width={width}
-                  height={height}
-                  viewBox={`0 0 ${width} ${height}`}
-                  style={{ transform: [{ translateX }] }}
-                >
-                  <Rect x='0' y='0' width={width} height={height} fill='red' />
-                </AnimatedSvg>
-              }
-            >
+            <Animated.View
+                removeClippedSubviews={false}
+                style={{position: 'absolute', width: translateX, height, overflow: 'hidden'}}
+              >
               <Image
                 source={{ uri: item.backdrop }}
                 style={{
                   width,
                   height: BACKDROP_HEIGHT,
-                  resizeMode: 'cover',
+                  position: 'absolute',
                 }}
               />
-            </MaskedView>
+            </Animated.View>
           );
         }}
       />

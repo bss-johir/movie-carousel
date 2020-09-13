@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, Animated } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, Animated, Platform } from 'react-native';
 //
 import { getMovies } from './api';
 import Rating from './Rating';
@@ -8,7 +8,8 @@ import Genres from './Genres';
 import Backdrop from './Backdrop';
 //
 const { width } = Dimensions.get('window')
-export const ITEM_SIZE = width * 0.72, SPACING = 10
+export const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.72 : width * 0.74
+, SPACING = 10
 const SPACE_SIZE = (width - ITEM_SIZE) / 2
 //
 
@@ -46,7 +47,7 @@ export default function App() {
             bounces={false}
             onScroll={Animated.event(
               [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-              { useNativeDriver: true }
+              { useNativeDriver: false }
             )}
             scrollEventThrottle={16}
             contentContainerStyle={styles.contentContainerStyle}
